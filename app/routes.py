@@ -16,10 +16,9 @@ def signup():
 
     if not username or not password:
         return jsonify({'error': 'Username and password are required'}), 400
-    
 
     if User.query.filter_by(username=username).first():
-        return jsonify({'flag':False,'message': 'Username already exists'}), 400
+        return jsonify({'flag': False, 'message': 'Username already exists'}), 400
 
     hashed_password = generate_password_hash(password)
     user = User(username=username, password=hashed_password)
@@ -36,10 +35,10 @@ def login():
 
     user = User.query.filter_by(username=username).first()
     if not user or not check_password_hash(user.password, password):
-        return jsonify({'flag':False,'message': 'Invalid username or password'}), 401
+        return jsonify({"flag": False, "message": "Invalid username or password"}), 401
 
     access_token = create_access_token(identity=user.id)
-    return jsonify({"flag":True,"message":"Login Successful"}), 200
+    return jsonify({"flag": True, "message": "Login Successful", "access_token": access_token}), 200
 
 @main.route('/api/protected', methods=['GET'])
 @jwt_required()
@@ -53,7 +52,7 @@ def create_tournament():
     data = request.get_json()
     name = data.get('name')
     start_date = data.get('start_date')
-    organizer_id = get_jwt_identity()  # Get the user ID from the JWT token
+    organizer_id = get_jwt_identity()
 
     if not name or not start_date:
         return jsonify({'error': 'Missing required fields'}), 400
@@ -62,7 +61,6 @@ def create_tournament():
     db.session.add(tournament)
     db.session.commit()
 
-    # Trigger Pusher event
     pusher_client.trigger('tournaments', 'new-tournament', {
         'id': tournament.id,
         'name': tournament.name,

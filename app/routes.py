@@ -16,6 +16,7 @@ def signup():
 
     if not username or not password:
         return jsonify({'error': 'Username and password are required'}), 400
+    
 
     if User.query.filter_by(username=username).first():
         return jsonify({'flag':False,'message': 'Username already exists'}), 400

@@ -6,3 +6,4 @@ pusher==3.3.2
 Flask-JWT-Extended==4.5.1
 Flask-CORS==4.0.1
 gunicorn==21.2.0 
+Flask-Migrate==4.0.7

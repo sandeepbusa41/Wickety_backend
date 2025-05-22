@@ -7,6 +7,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text, unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
+    phone=db.Column(db.Text,nullable=False)
+    email=db.Column(db.Text,nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     # tournaments = db.relationship('Tournament', backref='organizer', lazy=True)
 

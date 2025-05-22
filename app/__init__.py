@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate  # Import Flask-Migrate
 from dotenv import load_dotenv
 import os
 import pusher
@@ -8,6 +9,9 @@ from flask_cors import CORS
 
 # Initialize SQLAlchemy
 db = SQLAlchemy()
+
+# Initialize Migrate
+migrate = Migrate()  # Create a Migrate instance
 
 # Load environment variables
 load_dotenv()
@@ -33,6 +37,7 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     jwt = JWTManager(app)
+    migrate.init_app(app, db)  # Initialize Flask-Migrate with the app and db
 
     # Configure CORS to allow requests from http://localhost:3000
     CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
